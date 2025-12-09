@@ -4,96 +4,121 @@
 <head>
     <meta charset="UTF-8">
     <title>Heart Animation | NODi</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <link
-        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Pacifico&family=Great+Vibes&family=Dancing+Script:wght@700&display=swap"
         rel="stylesheet">
     <style>
         body {
             margin: 0;
             overflow: hidden;
-            background: #050505;
-            /* Deep black for better contrast */
-            font-family: 'Montserrat', sans-serif;
+            background: #0a0a0a;
+            font-family: 'Arial', sans-serif;
         }
 
         canvas {
             position: absolute;
             top: 0;
             left: 0;
-            z-index: 5;
         }
 
         svg {
+            position: absolute;
             display: none;
         }
 
-        /* Main Text Styling */
+        /* RESPONSIVE TEXT UPDATES */
         .text-overlay {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            /* Start hidden */
-            z-index: 100;
-            pointer-events: none;
-            text-align: center;
-            opacity: 0;
-            /* Start invisible */
-        }
+            transform: translate(-50%, -50%) scale(0.5);
 
-        .text-overlay h1 {
-            margin: 0;
-            font-size: 140px;
+            /* Responsive Font Size: 
+         It uses 18% of screen width, but never smaller than 50px 
+         and never bigger than 130px */
+            font-size: clamp(50px, 18vw, 130px);
+
             font-weight: 900;
             font-family: 'Dancing Script', cursive;
-            color: #fff;
-            /* White text for maximum clarity */
-            letter-spacing: 5px;
-            /* Strong red glow to blend with heart but keep text distinct */
+            color: #ffffff;
+            -webkit-text-stroke: 2px #ff1744;
             text-shadow:
-                0 0 10px #ff1744,
-                0 0 20px #ff1744,
-                0 0 40px #d50000,
-                0 0 80px #d50000;
-            -webkit-text-stroke: 2px rgba(255, 255, 255, 0.8);
-            /* White stroke for visibility */
+                0 0 10px rgba(255, 23, 68, 1),
+                0 0 20px rgba(255, 23, 68, 0.8),
+                0 0 40px rgba(255, 23, 68, 0.6);
+            z-index: 10;
+            pointer-events: none;
+            letter-spacing: 5px;
+            /* Reduced slightly for mobile safety */
+            white-space: nowrap;
+            /* Prevents text from breaking into two lines */
+            opacity: 0;
         }
 
-        /* Subtle background floating hearts */
         .hearts-background {
             position: absolute;
             width: 100%;
             height: 100%;
             overflow: hidden;
+            pointer-events: none;
             z-index: 1;
         }
 
         .floating-heart {
             position: absolute;
             font-size: 20px;
-            color: #ff1744;
             opacity: 0;
-            animation: floatUp 15s linear infinite;
+            animation: float 8s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 23, 68, 0.8));
+            color: #ff1744;
         }
 
-        @keyframes floatUp {
+        @keyframes float {
             0% {
-                transform: translateY(110vh) scale(0.5);
+                transform: translateY(100vh) rotate(0deg);
                 opacity: 0;
             }
 
-            20% {
-                opacity: 0.3;
+            10% {
+                opacity: 0.4;
             }
 
-            80% {
-                opacity: 0.3;
+            90% {
+                opacity: 0.4;
             }
 
             100% {
-                transform: translateY(-10vh) scale(1.2);
+                transform: translateY(-100px) rotate(360deg);
                 opacity: 0;
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkleAnim 1.5s ease-out forwards;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 1);
+        }
+
+        @keyframes sparkleAnim {
+            0% {
+                opacity: 1;
+                transform: scale(0);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.5);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0) translateY(-50px);
             }
         }
     </style>
@@ -102,232 +127,224 @@
 <body>
 
     <div class="hearts-background" id="heartsContainer"></div>
-
-    <div class="text-overlay" id="nameContainer">
-        <h1 id="nameText">NODi</h1>
-    </div>
+    <div class="text-overlay" id="nameText">NODi</div>
 
     <svg viewBox="0 0 600 552">
-        <path id="heartPath"
-            d="M300,107.77C284.68,55.67,239.76,0,162.31,0,64.83,0,0,82.08,0,171.71c0,.48,0,.95,0,1.43-.52,19.5,0,217.94,299.87,379.69v0l0,0,.05,0,0,0,0,0v0C600,391.08,600.48,192.64,600,173.14c0-.48,0-.95,0-1.43C600,82.08,535.17,0,437.69,0,360.24,0,315.32,55.67,300,107.77" />
+        <path
+            d="M300,107.77C284.68,55.67,239.76,0,162.31,0,64.83,0,0,82.08,0,171.71c0,.48,0,.95,0,1.43-.52,19.5,0,217.94,299.87,379.69v0l0,0,.05,0,0,0,0,0v0C600,391.08,600.48,192.64,600,173.14c0-.48,0-.95,0-1.43C600,82.08,535.17,0,437.69,0,360.24,0,315.32,55.67,300,107.77"
+            fill="#ee5282" />
     </svg>
 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js'></script>
 
     <script>
-        /* --- 1. SETUP BACKGROUND EFFECTS --- */
+        console.clear();
+
         const heartsContainer = document.getElementById('heartsContainer');
         function createFloatingHeart() {
             const heart = document.createElement('div');
             heart.className = 'floating-heart';
             heart.innerHTML = '❤';
             heart.style.left = Math.random() * 100 + '%';
-            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
-            heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            heart.style.fontSize = (Math.random() * 15 + 12) + 'px';
             heartsContainer.appendChild(heart);
-            setTimeout(() => heart.remove(), 25000);
+            setTimeout(() => { heart.remove(); }, 10000);
         }
-        setInterval(createFloatingHeart, 800);
 
-        /* --- 2. THREE.JS SCENE SETUP --- */
+        setInterval(createFloatingHeart, 1000);
+        for (let i = 0; i < 8; i++) { setTimeout(createFloatingHeart, i * 1000); }
+
+        function createSparkle() {
+            const nameElement = document.getElementById('nameText');
+            const style = window.getComputedStyle(nameElement);
+            if (style.opacity < 0.5) return;
+
+            const rect = nameElement.getBoundingClientRect();
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 80 + Math.random() * 40;
+            // Adjust sparkle positions based on current text size
+            const x = rect.left + rect.width / 2 + Math.cos(angle) * (rect.width / 2);
+            const y = rect.top + rect.height / 2 + Math.sin(angle) * (rect.height / 2);
+
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+            document.body.appendChild(sparkle);
+
+            setTimeout(() => sparkle.remove(), 1500);
+        }
+        setInterval(() => { for (let i = 0; i < 3; i++) setTimeout(createSparkle, i * 100); }, 500);
+
+
+        /* --- THREE.JS SETUP --- */
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 5000);
-        camera.position.z = 600;
+
+        // RESPONSIVE CAMERA LOGIC
+        function updateCameraPosition() {
+            if (window.innerWidth < 600) {
+                // Mobile: Move camera back significantly
+                camera.position.z = 1100;
+            } else if (window.innerWidth < 900) {
+                // Tablet
+                camera.position.z = 800;
+            } else {
+                // Desktop
+                camera.position.z = 500;
+            }
+        }
+        updateCameraPosition(); // Set on load
 
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setPixelRatio(window.devicePixelRatio > 1 ? 2 : 1);
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000, 0);
         document.body.appendChild(renderer.domElement);
 
-        /* --- 3. CREATE HEART PARTICLES --- */
-        const path = document.getElementById("heartPath");
-        const pathLength = path.getTotalLength();
-        const particleCount = 2000; // Increased density for better heart shape
-        const geometry = new THREE.BufferGeometry();
-        const positions = new Float32Array(particleCount * 3);
-        const colors = new Float32Array(particleCount * 3);
+        /* --- ANIMATION LOGIC (UNCHANGED) --- */
+        const tl = gsap.timeline({ repeat: -1 });
 
-        // Store original "Heart Shape" positions to animate TO
-        const targetPositions = [];
+        const path = document.querySelector("path");
+        const length = path.getTotalLength();
+        const vertices = [];
+        const colors = [];
 
-        const color1 = new THREE.Color(0xff0040); // Bright Red
-        const color2 = new THREE.Color(0xff4081); // Pink
+        const color1 = new THREE.Color(0xff1744);
+        const color2 = new THREE.Color(0xd81b60);
+        const color3 = new THREE.Color(0xff4081);
 
-        for (let i = 0; i < particleCount; i++) {
-            // Calculate point on heart path
-            const point = path.getPointAtLength((i / particleCount) * pathLength);
+        for (let i = 0; i < length; i += 0.08) {
+            const point = path.getPointAtLength(i);
+            const vector = new THREE.Vector3(point.x, -point.y, 0);
 
-            // Center the heart (original SVG is 600x552)
-            const x = point.x - 300;
-            const y = -(point.y - 276); // Invert Y for 3D space
-            const z = (Math.random() - 0.5) * 50; // Slight depth
+            vector.x += (Math.random() - 0.5) * 45;
+            vector.y += (Math.random() - 0.5) * 45;
+            vector.z += (Math.random() - 0.5) * 120;
 
-            // Add some random scatter for the "Target" so it's not a perfect line
-            const scatter = 10;
-            targetPositions.push({
-                x: x + (Math.random() - 0.5) * scatter,
-                y: y + (Math.random() - 0.5) * scatter,
-                z: z
-            });
+            vertices.push(vector);
 
-            // Initial positions (Exploded view)
-            positions[i * 3] = (Math.random() - 0.5) * 2000; // Random X
-            positions[i * 3 + 1] = (Math.random() - 0.5) * 2000; // Random Y
-            positions[i * 3 + 2] = (Math.random() - 0.5) * 2000; // Random Z
+            const ratio = i / length;
+            let color;
+            if (ratio < 0.33) color = color1.clone().lerp(color2, ratio * 3);
+            else if (ratio < 0.66) color = color2.clone().lerp(color3, (ratio - 0.33) * 3);
+            else color = color3.clone().lerp(color1, (ratio - 0.66) * 3);
 
-            // Color gradient
-            const mixedColor = color1.clone().lerp(color2, Math.random());
-            colors[i * 3] = mixedColor.r;
-            colors[i * 3 + 1] = mixedColor.g;
-            colors[i * 3 + 2] = mixedColor.b;
+            colors.push(color.r, color.g, color.b);
+
+            tl.from(vector, {
+                x: 600 / 2 + (Math.random() - 0.5) * 150,
+                y: -552 / 2 + (Math.random() - 0.5) * 150,
+                z: (Math.random() - 0.5) * 300,
+                ease: "elastic.out(1, 0.4)",
+                duration: "random(3, 7)"
+            }, i * 0.0012);
         }
 
-        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        const geometry = new THREE.BufferGeometry().setFromPoints(vertices);
+        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
 
         const material = new THREE.PointsMaterial({
-            size: 4,
+            size: 5,
             vertexColors: true,
             blending: THREE.AdditiveBlending,
             transparent: true,
-            opacity: 0.9,
-            sizeAttenuation: true
+            opacity: 1
         });
 
         const particles = new THREE.Points(geometry, material);
+        particles.position.x -= 600 / 2;
+        particles.position.y += 552 / 2;
         scene.add(particles);
 
-        /* --- 4. ANIMATION LOGIC (GSAP) --- */
-
-        // Helper object to tween arrays
-        const particleSystem = {
-            progress: 0
-        };
-
-        // Main Timeline
-        const masterTl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
-
-        // Step A: Form the Heart (Duration: 3.5s)
-        masterTl.to(particleSystem, {
-            progress: 1,
-            duration: 3.5,
-            ease: "power3.out",
-            onUpdate: () => {
-                const positions = particles.geometry.attributes.position.array;
-                for (let i = 0; i < particleCount; i++) {
-                    // Lerp current position towards target
-                    const tx = targetPositions[i].x;
-                    const ty = targetPositions[i].y;
-                    const tz = targetPositions[i].z;
-
-                    // Interpolate from scattered (stored in current buffer) to target
-                    // Note: For a true "from random", we rely on the math below. 
-                    // Since we want to re-use this, we calculate based on progress.
-
-                    // Simple trick: We actually updated the buffer in "Step C" to scatter.
-                    // So here we pull them back.
-
-                    // To keep it simple and robust, let's just use the logic:
-                    // Current = Current + (Target - Current) * factor
-                    // But GSAP is cleaner if we access the buffer directly.
-                }
-            }
-        });
-
-        // RE-DOING ANIMATION LOGIC FOR CLEANER LOOP:
-        // We will animate the 'dummy' objects representing each particle
-
-        // Create an array of dummy objects for GSAP to manipulate
-        const dummies = [];
-        for (let i = 0; i < particleCount; i++) {
-            dummies.push({
-                x: (Math.random() - 0.5) * 3000,
-                y: (Math.random() - 0.5) * 3000,
-                z: (Math.random() - 0.5) * 3000
-            });
-        }
-
-        // Function to update geometry from dummies
-        function updateParticles() {
-            const positions = particles.geometry.attributes.position.array;
-            for (let i = 0; i < particleCount; i++) {
-                positions[i * 3] = dummies[i].x;
-                positions[i * 3 + 1] = dummies[i].y;
-                positions[i * 3 + 2] = dummies[i].z;
-            }
-            particles.geometry.attributes.position.needsUpdate = true;
-        }
-
-        // --- RESTART TIMELINE ---
-        masterTl.clear();
-
-        // 1. CONVERGE: Particles fly from random -> Heart Shape
-        masterTl.to(dummies, {
-            x: (i) => targetPositions[i].x,
-            y: (i) => targetPositions[i].y,
-            z: (i) => targetPositions[i].z,
-            duration: 3,
-            ease: "elastic.out(1, 0.5)",
-            stagger: { amount: 0.5, from: "random" },
-            onUpdate: updateParticles
-        });
-
-        // 2. REVEAL TEXT: Text appears AFTER heart is formed
-        masterTl.to("#nameContainer", {
+        // Timeline Sequence
+        tl.to(".text-overlay", {
             opacity: 1,
             scale: 1,
-            duration: 1.5,
-            ease: "back.out(1.7)"
-        }, "-=0.5"); // Start slightly before particles finish settling
+            duration: 2,
+            ease: "power2.out"
+        }, "-=1.5");
 
-        // 3. THE "HOLD" (Heartbeat & Wait) - 10 Seconds
-        // We use a loop for the heartbeat effect during the wait
-        for (let i = 0; i < 8; i++) { // 8 beats roughly covers 10 seconds
-            masterTl.to(particles.scale, { x: 1.1, y: 1.1, duration: 0.2, ease: "power1.out" });
-            masterTl.to(particles.scale, { x: 1, y: 1, duration: 0.4, ease: "power1.in" });
-            masterTl.to({}, { duration: 0.6 }); // Pause between beats
-        }
+        // WAIT 10 SECONDS
+        tl.to({}, { duration: 10 });
 
-        // 4. EXIT: Text Hides & Heart Explodes TOGETHER
-        masterTl.to("#nameContainer", {
+        tl.add("exit");
+
+        tl.to(".text-overlay", {
             opacity: 0,
-            scale: 3,
+            scale: 1.5,
             filter: "blur(20px)",
-            duration: 1.5,
-            ease: "power2.in"
+            duration: 1
         }, "exit");
 
-        masterTl.to(dummies, {
-            x: () => (Math.random() - 0.5) * 3000,
-            y: () => (Math.random() - 0.5) * 3000,
-            z: () => (Math.random() - 0.5) * 2000,
-            duration: 2,
-            ease: "power3.in",
-            onUpdate: updateParticles
-        }, "exit"); // Run at label "exit" syncs with text hiding
+        tl.to(vertices, {
+            x: () => (Math.random() - 0.5) * 1500,
+            y: () => (Math.random() - 0.5) * 1500,
+            z: () => (Math.random() - 0.5) * 1500,
+            duration: 3,
+            ease: "power2.in",
+            stagger: { amount: 1, from: "random" }
+        }, "exit");
+
+        tl.to({}, { duration: 1 });
 
 
-        /* --- 5. RENDER LOOP --- */
-        function animate() {
-            requestAnimationFrame(animate);
+        // --- GLOW PARTICLES ---
+        const glowGeometry = new THREE.BufferGeometry();
+        const glowVertices = [];
+        const glowColors = [];
+        for (let i = 0; i < 300; i++) {
+            const radius = Math.random() * 90 + 20;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.random() * Math.PI * 2;
+            glowVertices.push(
+                radius * Math.sin(theta) * Math.cos(phi),
+                radius * Math.sin(theta) * Math.sin(phi),
+                radius * Math.cos(theta)
+            );
+            const glowColor = new THREE.Color(0xff1744);
+            glowColors.push(glowColor.r, glowColor.g, glowColor.b);
+        }
+        glowGeometry.setAttribute('position', new THREE.Float32BufferAttribute(glowVertices, 3));
+        glowGeometry.setAttribute('color', new THREE.Float32BufferAttribute(glowColors, 3));
+        const glowMaterial = new THREE.PointsMaterial({
+            size: 7, vertexColors: true, blending: THREE.AdditiveBlending, transparent: true, opacity: 0
+        });
+        const glowParticles = new THREE.Points(glowGeometry, glowMaterial);
+        scene.add(glowParticles);
 
-            // Gentle rotation of the whole system
-            particles.rotation.y += 0.002;
-            particles.rotation.z = Math.sin(Date.now() * 0.001) * 0.05;
+        gsap.to(glowMaterial, { opacity: 0.6, duration: 2, repeat: -1, yoyo: true, delay: 4 });
+        gsap.to(glowParticles.rotation, { z: Math.PI * 2, duration: 12, repeat: -1, ease: 'none' });
+        gsap.to(glowParticles.scale, { x: 1.4, y: 1.4, z: 1.4, duration: 2.5, repeat: -1, yoyo: true, ease: 'power2.inOut' });
 
+        gsap.fromTo(scene.rotation,
+            { y: -0.35, x: -0.12 },
+            { y: 0.35, x: 0.12, repeat: -1, yoyo: true, ease: 'power2.inOut', duration: 5 }
+        );
+
+        function render() {
+            requestAnimationFrame(render);
+            geometry.setFromPoints(vertices);
+            glowParticles.rotation.y += 0.003;
+            glowParticles.rotation.x += 0.001;
             renderer.render(scene, camera);
         }
 
-        // Handle Window Resize
-        window.addEventListener('resize', () => {
+        function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
+            updateCameraPosition(); // Update Z position on resize
             renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+        }
+        window.addEventListener("resize", onWindowResize, false);
 
-        animate();
+        requestAnimationFrame(render);
     </script>
+
 </body>
 
 </html>
